@@ -5,10 +5,17 @@ import java.awt.*;
 
 public class Tank {
 
+
     private int x;
     private int y;
-    private int speed;
+    private final int speed;
     private Direction direction;
+    private boolean[] dirs = new boolean[4];
+
+    public boolean[] getDirs() {
+        return dirs;
+    }
+
 
     public Tank(int x, int y, Direction direction) {
         this.x = x;
@@ -16,6 +23,27 @@ public class Tank {
         this.direction = direction;
         speed = 5;
     }
+
+    public void detectDirection() {
+        if (dirs[0] && !dirs[1] && !dirs[2] && !dirs[3]) {
+            direction = Direction.UP;
+        } else if (!dirs[0] && dirs[1] && !dirs[2] && !dirs[3]) {
+            direction = Direction.DOWN;
+        } else if (!dirs[0] && !dirs[1] && dirs[2] && !dirs[3]) {
+            direction = Direction.LEFT;
+        } else if (!dirs[0] && !dirs[1] && !dirs[2] && dirs[3]) {
+            direction = Direction.RIGHT;
+        } else if (dirs[0] && !dirs[1] && dirs[2] && !dirs[3]) {
+            direction = Direction.LEFT_UP;
+        } else if (!dirs[0] && dirs[1] && dirs[2] && !dirs[3]) {
+            direction = Direction.LEFT_DOWN;
+        } else if (dirs[0] && !dirs[1] && !dirs[2] && dirs[3]) {
+            direction = Direction.RIGHT_UP;
+        } else if (!dirs[0] && dirs[1] && !dirs[2] && dirs[3]) {
+            direction = Direction.RIGHT_DOWN;
+        }
+    }
+
 
     public int getSpeed() {
         return speed;
@@ -117,4 +145,23 @@ public class Tank {
 
         }
     }
+
+    public void draw(Graphics g) {
+        if(isRunning()) {
+            detectDirection();
+            move();
+        }
+        g.drawImage(getImage(), x, y, null);
+    }
+
+    public boolean isRunning(){
+        for(int i= 0;i<dirs.length;i++){
+            if(dirs[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
