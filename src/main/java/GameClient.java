@@ -1,21 +1,22 @@
-import object.Direction;
-import object.Tank;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class GameClient extends JComponent {
 
-    private int screenWidth;
-    private int screenHeight;
+    private final int screenWidth;
+    private final int screenHeight;
 
 
     private Tank playerTank;
+    private Image backGround;
     private boolean stop;
+    private ArrayList<Tank>enemyTanks = new ArrayList<>();
+    private ArrayList<wall>walls = new ArrayList<>();
 
     GameClient() {
-        this(800, 600);
+        this(1000, 800);
     }
 
     public GameClient(int screenWidth, int screenHeight) {
@@ -43,16 +44,52 @@ public class GameClient extends JComponent {
     }
 
     public void init(){
-        playerTank=new Tank(400,300, Direction.DOWN);
+        backGround = Tools.getImage("a.jpg");
+        Image[] brickImage={Tools.getImage("brick.png")};
+
+        Image[] iTankImage = new Image[8];
+        Image[] eTankImage = new Image[8];
+
+        String[] sub = {"U","D","L","R","LU","LD","RD","RU"};
+        for(int i= 0; i<iTankImage.length;i++){
+            iTankImage[i] = Tools.getImage("itank"+sub[i]+".png");
+            eTankImage[i] = Tools.getImage("etank"+sub[i]+".png");
+
+        }
+
+         playerTank = new Tank(500, 100, Direction.DOWN,iTankImage);
+
+
+        for(int i=0;i<3;i++){
+            for(int j=0;j<4;j++){
+                enemyTanks.add(new Tank(350+j*90,250+80*i,Direction.UP,true,eTankImage));
+            }
+        }
+
+        walls.add(new wall(265,200,true,15,brickImage));
+        walls.add(new wall(200,100,false,16,brickImage));
+        walls.add(new wall(750,100,false,16,brickImage));
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
+
+        g.setColor(Color.GRAY);
+        g.fillRect(0,0,screenWidth,screenHeight);
+        g.drawImage(backGround,0,0,null);
+        playerTank.draw(g);
+
+        for(Tank tank:enemyTanks){
+            tank.draw(g);
+        }
+        for(wall wall:walls){
+            wall.draw(g);
+        }
+
         //super.paintComponent(g);
         //image object
-        g.setColor(Color.black);
-        g.fillRect(0,0,screenWidth,screenHeight);
-        playerTank.draw(g);
+
 
     }
 
@@ -80,7 +117,7 @@ public class GameClient extends JComponent {
                 break;
         }
 
-        playerTank.move();
+        //playerTank.move();
 
 
         //repaint();

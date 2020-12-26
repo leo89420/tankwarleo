@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 public class TankGame {
 
     public static void main(String[] args) {
-        GameClient gameClient=new GameClient();
+        GameClient gameClient=new GameClient(1200,793);
         JFrame frame=new JFrame();
         frame.add(gameClient);
         frame.setVisible(true);
