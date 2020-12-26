@@ -77,6 +77,7 @@ public class Tank extends GameObject {
         return direction;
     }
 
+    
     public Image getImage() {
         String name = enemy ? "etank" : "itank";
         if (direction == Direction.UP) {
