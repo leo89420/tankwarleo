@@ -6,8 +6,10 @@ public abstract class GameObject {
 
     protected int x;
     protected int y;
-    private  int width;
-    private  int height;
+    protected int oldX;
+    protected int oldY;
+    protected   int width;
+    protected   int height;
 
     protected Image[] image;
 
@@ -19,5 +21,9 @@ public abstract class GameObject {
         height = image[0].getHeight(null);
     }
 
+    public Rectangle getRectangle(){
+        return new Rectangle(x,y,width,height);
+    }
     public abstract void draw(Graphics g);
+
 }

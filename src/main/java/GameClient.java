@@ -1,3 +1,5 @@
+import object.GameObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,11 +14,13 @@ public class GameClient extends JComponent {
     private Tank playerTank;
     private Image backGround;
     private boolean stop;
-    private ArrayList<Tank>enemyTanks = new ArrayList<>();
-    private ArrayList<wall>walls = new ArrayList<>();
+    //private ArrayList<Tank>enemyTanks = new ArrayList<>();
+    //private ArrayList<wall>walls = new ArrayList<>();
 
+
+    private ArrayList<GameObject>GameObjects= new ArrayList<>();
     GameClient() {
-        this(1000, 800);
+        this(800, 600);
     }
 
     public GameClient(int screenWidth, int screenHeight) {
@@ -43,6 +47,10 @@ public class GameClient extends JComponent {
 
     }
 
+    public ArrayList<GameObject> getGameObjects() {
+        return GameObjects;
+    }
+
     public void init(){
         backGround = Tools.getImage("a.jpg");
         Image[] brickImage={Tools.getImage("brick.png")};
@@ -57,18 +65,18 @@ public class GameClient extends JComponent {
 
         }
 
-         playerTank = new Tank(500, 100, Direction.DOWN,iTankImage);
-
+         playerTank = new Tank(400, 100, Direction.DOWN,iTankImage);
+        GameObjects.add(playerTank);
 
         for(int i=0;i<3;i++){
             for(int j=0;j<4;j++){
-                enemyTanks.add(new Tank(350+j*90,250+80*i,Direction.UP,true,eTankImage));
+                GameObjects.add(new Tank(350+j*110,300+100*i,Direction.UP,true,eTankImage));
             }
         }
 
-        walls.add(new wall(265,200,true,15,brickImage));
-        walls.add(new wall(200,100,false,16,brickImage));
-        walls.add(new wall(750,100,false,16,brickImage));
+        GameObjects.add(new wall(170,150,true,18,brickImage));
+        GameObjects.add(new wall(70,100,false,14,brickImage));
+        GameObjects.add(new wall(800,100,false,14,brickImage));
     }
 
 
@@ -78,19 +86,30 @@ public class GameClient extends JComponent {
         g.setColor(Color.GRAY);
         g.fillRect(0,0,screenWidth,screenHeight);
         g.drawImage(backGround,0,0,null);
-        playerTank.draw(g);
+        //playerTank.draw(g);
 
-        for(Tank tank:enemyTanks){
-            tank.draw(g);
+        for(GameObject object:GameObjects){
+            object.draw(g);
         }
-        for(wall wall:walls){
-            wall.draw(g);
-        }
+//        for(Tank tank:enemyTanks){
+//            tank.draw(g);
+//        }
+//        for(wall wall:walls){
+//            wall.draw(g);
+//        }
 
         //super.paintComponent(g);
         //image object
 
 
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
     }
 
     public void keyPressed(KeyEvent e){
